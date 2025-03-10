@@ -18,7 +18,7 @@ export const metadata = {
     siteName: "Random Tweets",
     images: [
       {
-        url: "https://t.notedrop.xyz/favicon.png",
+        url: "https://t.notedrop.xyz/rt.png",
         width: 1200,
         height: 630,
         alt: "Random Tweets Template",
