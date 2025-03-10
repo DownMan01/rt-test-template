@@ -27,6 +27,13 @@ export const metadata = {
     locale: "en_US",
     type: "website",
   },
+   twitter: {
+    card: "summary_large_image",
+    title: "Random Tweets Template Website",
+    description: "A website with random tweets template.",
+    creator: "@weVibesMedia",
+    images: ["https://t.notedrop.xyz/rt.png"],
+  },
 }
 
 export default function RootLayout({
