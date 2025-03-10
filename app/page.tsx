@@ -8,10 +8,10 @@ import { Textarea } from "@/components/ui/textarea"
 import { toPng } from "html-to-image"
 
 export default function TwitterGenerator() {
-  const [name, setName] = useState("Andrew")
-  const [handle, setHandle] = useState("andrewlmXXXI")
-  const [tweet, setTweet] = useState("yung back hug na pinapangarap ko,\nback pain na ngayon")
-  const [profileImage, setProfileImage] = useState("/placeholder.svg?height=80&width=80")
+  const [name, setName] = useState("Random Tweets")
+  const [handle, setHandle] = useState("irtph")
+  const [tweet, setTweet] = useState("dito mo ilagay yung quote mo, \ndapat hindi masyadong mahaba. ")
+  const [profileImage, setProfileImage] = useState("/rt.svg?height=80&width=80")
   const [background, setBackground] = useState("")
   const tweetRef = useRef<HTMLDivElement>(null)
   const [isGenerating, setIsGenerating] = useState(false)
