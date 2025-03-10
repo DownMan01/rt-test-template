@@ -6,9 +6,27 @@ import { ThemeProvider } from "@/components/theme-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "Twitter Quote Generator",
-  description: "Create and customize Twitter-style quotes",
-    generator: 'v0.dev'
+  title: {
+    default: "Random Tweets Template",
+    template: "%s | RandomTweets - An RT Template Website",
+  },
+  description: "Create and customize Random Tweets-Quotes",
+    openGraph: {
+    title: "Random Tweets Template",
+    description: "A website with random tweets template.",
+    url: "https://t.notedrop.xyz/",
+    siteName: "Random Tweets",
+    images: [
+      {
+        url: "https://t.notedrop.xyz/favicon.png",
+        width: 1200,
+        height: 630,
+        alt: "Random Tweets Template",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
 }
 
 export default function RootLayout({
