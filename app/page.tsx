@@ -73,7 +73,7 @@ export default function TwitterGenerator() {
   return (
     <div className="min-h-screen bg-[#15202B] text-white p-6">
       <div className="max-w-2xl mx-auto space-y-8">
-        <h1 className="text-2xl font-bold text-center">Twitter Quote Generator</h1>
+        <h1 className="text-2xl font-bold text-center">Random Tweets Quote Generator</h1>
 
         <div className="space-y-6">
           <div className="grid grid-cols-2 gap-4">
