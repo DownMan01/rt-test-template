@@ -175,7 +175,7 @@ export default function TwitterGenerator() {
                   </div>
                   <div className="flex-grow">
                     <div className="text-white font-bold text-xl">{name}</div>
-                    <div className="text-gray-500 text-lg">@{handle}</div>
+                    <div className="text-gray-500 text-xl">@{handle}</div>
                   </div>
                   <div className="text-gray-500 text-sm leading-none">•••</div>
                 </div>
