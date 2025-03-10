@@ -143,7 +143,7 @@ export default function TwitterGenerator() {
         <div
           className="relative shadow-2xl rounded-lg"
           style={{
-            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
+            boxShadow: "0 5px 50px -12px rgba(255, 255, 255, 0.5)",
             width: "100%",
             maxWidth: "600px",
             margin: "0 auto",
