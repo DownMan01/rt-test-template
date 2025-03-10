@@ -174,7 +174,7 @@ export default function TwitterGenerator() {
                     />
                   </div>
                   <div className="flex-grow">
-                    <div className="text-white font-bold text-lg">{name}</div>
+                    <div className="text-white font-bold text-xl">{name}</div>
                     <div className="text-gray-500">@{handle}</div>
                   </div>
                   <div className="text-gray-500 text-sm leading-none">•••</div>
@@ -182,7 +182,7 @@ export default function TwitterGenerator() {
 
                 {/* Tweet content */}
                 <div className="mt-4">
-                  <p className="text-white text-xl whitespace-pre-line">{tweet}</p>
+                  <p className="text-white text-2xl whitespace-pre-line">{tweet}</p>
                 </div>
               </div>
             </div>
