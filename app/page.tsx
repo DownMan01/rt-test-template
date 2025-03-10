@@ -157,7 +157,7 @@ export default function TwitterGenerator() {
           >
             {/* Tweet container */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-full max-w-lg bg-[#151f2b] p-4">
+              <div className="w-full max-w-lg bg-[#151f2b] p-6">
                 {/* Profile section */}
                 <div className="flex items-start">
                   <div className="w-12 h-12 rounded-full overflow-hidden mr-3 bg-gray-800 border border-gray-700">
