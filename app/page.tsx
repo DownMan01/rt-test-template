@@ -171,7 +171,7 @@ export default function TwitterGenerator() {
                     <div className="text-white font-bold text-lg">{name}</div>
                     <div className="text-gray-500">@{handle}</div>
                   </div>
-                  <div className="text-gray-500 text-base leading-none">•••</div>
+                  <div className="text-gray-500 text-sm leading-none">•••</div>
                 </div>
 
                 {/* Tweet content */}
