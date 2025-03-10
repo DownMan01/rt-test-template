@@ -134,6 +134,11 @@ export default function TwitterGenerator() {
           </div>
         </div>
 
+        <div className="mt-4"></div>
+        <div className="mt-4"></div>
+
+
+
         {/* Preview with outer shadow only */}
         <div
           className="relative shadow-2xl rounded-lg"
