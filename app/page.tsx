@@ -152,7 +152,7 @@ export default function TwitterGenerator() {
         >
           <div
             ref={tweetRef}
-            className="aspect-square relative overflow-hidden rounded-lg"
+            className="aspect-square relative overflow-hidden rounded-none"
             style={{
               backgroundColor: "#15202B",
               backgroundImage: background ? `url(${background})` : "none",
