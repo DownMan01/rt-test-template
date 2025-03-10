@@ -12,7 +12,7 @@ export default function TwitterGenerator() {
   const [handle, setHandle] = useState("irtph")
   const [tweet, setTweet] = useState("dito mo ilagay yung quote mo, \ndapat hindi masyadong mahaba. ")
   const [profileImage, setProfileImage] = useState("/rt.svg?height=80&width=80")
-  const [background, setBackground] = useState("/bg-rt.svg?height=1500&width=1500")
+  const [background, setBackground] = useState("/bg-rt.png?height=1500&width=1500")
   const tweetRef = useRef<HTMLDivElement>(null)
   const [isGenerating, setIsGenerating] = useState(false)
 
