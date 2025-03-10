@@ -182,7 +182,7 @@ export default function TwitterGenerator() {
 
                 {/* Tweet content */}
                 <div className="mt-4">
-                  <p className="text-white text-2xl whitespace-pre-line">{tweet}</p>
+                  <p className="text-white text-2xl font-twitter whitespace-pre-line">{tweet}</p>
                 </div>
               </div>
             </div>
