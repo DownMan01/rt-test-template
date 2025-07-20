@@ -10,7 +10,7 @@ import { toPng } from "html-to-image"
 export default function TwitterGenerator() {
   const [name, setName] = useState("Random Tweets")
   const [handle, setHandle] = useState("irtph")
-  const [tweet, setTweet] = useState("dito mo ilagay yung quote mo, \ndapat hindi masyadong mahaba. ")
+  const [tweet, setTweet] = useState("dito mo ilagay yung quote mo, \ndapat hindi masyadong mahaba....")
   const [profileImage, setProfileImage] = useState("/rt.svg?height=80&width=80")
   const [background, setBackground] = useState("/bg-rt.png?height=1500&width=1500")
   const tweetRef = useRef<HTMLDivElement>(null)
@@ -48,16 +48,14 @@ export default function TwitterGenerator() {
     setIsGenerating(true)
 
     try {
-      // Directly capture the preview element
       const dataUrl = await toPng(tweetRef.current, {
         cacheBust: true,
         quality: 1,
-        pixelRatio: 3, // Higher pixel ratio for better quality
+        pixelRatio: 3,
         canvasWidth: 1500,
         canvasHeight: 1500,
       })
 
-      // Create download link
       const link = document.createElement("a")
       link.download = "twitter-quote.png"
       link.href = dataUrl
@@ -71,12 +69,12 @@ export default function TwitterGenerator() {
   }
 
   return (
-    <div className="min-h-screen bg-[#15202B] text-white p-6">
+    <div className="min-h-screen bg-[#15202B] text-white px-4 sm:px-6 py-6">
       <div className="max-w-2xl mx-auto space-y-8">
-        <h1 className="text-2xl font-bold text-center">Random Tweets Quote Generator</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-center">Random Tweets Quote Generator</h1>
 
         <div className="space-y-6">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-sm">Name</label>
               <Input
@@ -113,7 +111,7 @@ export default function TwitterGenerator() {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="text-sm block mb-2">Profile Image</label>
               <label className="flex items-center justify-center w-full h-10 px-4 py-2 text-sm font-medium bg-gray-900/50 border border-gray-700 rounded-md hover:bg-gray-800 cursor-pointer">
@@ -134,37 +132,27 @@ export default function TwitterGenerator() {
           </div>
         </div>
 
-        <div className="mt-4"></div>
-        <div className="mt-4"></div>
-        <div className="mt-4"></div>
-
-
-
-        {/* Preview with outer shadow only */}
+        {/* Preview */}
         <div
-          className="relative shadow-2xl rounded-none"
+          className="relative shadow-2xl rounded-none mx-auto"
           style={{
             boxShadow: "0 5px 50px -12px rgba(255, 255, 255, 0.5)",
             width: "100%",
             maxWidth: "600px",
-            margin: "0 auto",
           }}
         >
           <div
             ref={tweetRef}
-            className="aspect-square relative overflow-hidden rounded-none"
+            className="w-full aspect-[4/5] sm:aspect-square relative overflow-hidden"
             style={{
               backgroundColor: "#15202B",
               backgroundImage: background ? `url(${background})` : "none",
               backgroundSize: "cover",
               backgroundPosition: "center",
-              width: "100%",
             }}
           >
-            {/* Tweet container */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-full max-w-lg bg-[#151f2b] px-12">
-                {/* Profile section */}
+              <div className="w-full max-w-lg bg-[#151f2b] px-6 sm:px-12">
                 <div className="flex items-start">
                   <div className="w-12 h-12 rounded-full overflow-hidden mr-3 bg-gray-800 border border-gray-700">
                     <img
@@ -174,21 +162,21 @@ export default function TwitterGenerator() {
                     />
                   </div>
                   <div className="flex-grow">
-                    <div className="text-white font-bold text-xl">{name}</div>
-                    <div className="text-gray-500 text-xl">@{handle}</div>
+                    <div className="text-white font-bold text-base sm:text-xl">{name}</div>
+                    <div className="text-gray-500 text-base sm:text-xl">@{handle}</div>
                   </div>
                   <div className="text-gray-500 text-sm leading-none">•••</div>
                 </div>
 
-                {/* Tweet content */}
                 <div className="mt-4">
-                  <p className="text-white text-2xl font-twitter whitespace-pre-line">{tweet}</p>
+                  <p className="text-white text-lg sm:text-2xl font-twitter whitespace-pre-line">{tweet}</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
+        {/* Download Button */}
         <div className="flex justify-center">
           <Button onClick={downloadImage} className="bg-blue-500 hover:bg-blue-600" disabled={isGenerating}>
             {isGenerating ? (
