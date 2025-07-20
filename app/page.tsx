@@ -10,9 +10,9 @@ import { toPng } from "html-to-image"
 export default function TwitterGenerator() {
   const [name, setName] = useState("Random Tweets")
   const [handle, setHandle] = useState("irtph")
-  const [tweet, setTweet] = useState("dito mo ilagay yung quote mo, \ndapat hindi masyadong mahaba....")
-  const [profileImage, setProfileImage] = useState("/rt.svg?height=80&width=80")
-  const [background, setBackground] = useState("/bg-rt.png?height=1500&width=1500")
+  const [tweet, setTweet] = useState("dito mo ilagay yung quote mo, \ndapat hindi masyadong mahaba.")
+  const [profileImage, setProfileImage] = useState("/rt.svg")
+  const [background, setBackground] = useState("/bg-rt.png")
   const tweetRef = useRef<HTMLDivElement>(null)
   const [isGenerating, setIsGenerating] = useState(false)
 
@@ -133,17 +133,10 @@ export default function TwitterGenerator() {
         </div>
 
         {/* Preview */}
-        <div
-          className="relative shadow-2xl rounded-none mx-auto"
-          style={{
-            boxShadow: "0 5px 50px -12px rgba(255, 255, 255, 0.5)",
-            width: "100%",
-            maxWidth: "600px",
-          }}
-        >
+        <div className="relative w-full max-w-md mx-auto">
           <div
             ref={tweetRef}
-            className="w-full aspect-[4/5] sm:aspect-square relative overflow-hidden"
+            className="absolute inset-0 w-full h-full overflow-hidden aspect-square"
             style={{
               backgroundColor: "#15202B",
               backgroundImage: background ? `url(${background})` : "none",
@@ -153,6 +146,7 @@ export default function TwitterGenerator() {
           >
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-full max-w-lg bg-[#151f2b] px-6 sm:px-12">
+                {/* Profile */}
                 <div className="flex items-start">
                   <div className="w-12 h-12 rounded-full overflow-hidden mr-3 bg-gray-800 border border-gray-700">
                     <img
@@ -168,12 +162,14 @@ export default function TwitterGenerator() {
                   <div className="text-gray-500 text-sm leading-none">•••</div>
                 </div>
 
+                {/* Tweet */}
                 <div className="mt-4">
                   <p className="text-white text-lg sm:text-2xl font-twitter whitespace-pre-line">{tweet}</p>
                 </div>
               </div>
             </div>
           </div>
+          <div className="pb-[100%]"></div>
         </div>
 
         {/* Download Button */}
@@ -187,12 +183,12 @@ export default function TwitterGenerator() {
                   fill="none"
                   viewBox="0 0 24 24"
                 >
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path
                     className="opacity-75"
                     fill="currentColor"
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
+                  />
                 </svg>
                 Generating...
               </span>
