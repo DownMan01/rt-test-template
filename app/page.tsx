@@ -173,8 +173,8 @@ export default function TwitterGenerator() {
                     />
                   </div>
                   <div className="flex-grow min-w-0">
-                    <div className="text-white font-bold text-[12.5px] sm:text-xl truncate">{name}</div>
-                    <div className="text-gray-500 text-[12.5px] sm:text-xl truncate mt-0.5">@{handle}</div>
+                    <div className="text-white font-bold text-[12.5px] sm:text-xl truncate leading-tight">{name}</div>
+                    <div className="text-gray-500 text-[12.5px] sm:text-xl truncate leading-tight">@{handle}</div>
                   </div>
                   <div className="text-gray-500 text-[9.5px] sm:text-sm leading-none flex-shrink-0 ml-1 sm:ml-2">•••</div>
                 </div>
