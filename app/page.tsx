@@ -71,12 +71,12 @@ export default function TwitterGenerator() {
   }
 
   return (
-    <div className="min-h-screen bg-[#15202B] text-white p-6">
-      <div className="max-w-2xl mx-auto space-y-8">
-        <h1 className="text-2xl font-bold text-center">Random Tweets Quote Generator</h1>
+    <div className="min-h-screen bg-[#15202B] text-white p-4 sm:p-6">
+      <div className="max-w-2xl mx-auto space-y-6 sm:space-y-8">
+        <h1 className="text-xl sm:text-2xl font-bold text-center">Random Tweets Quote Generator</h1>
 
-        <div className="space-y-6">
-          <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-4 sm:space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-sm">Name</label>
               <Input
@@ -109,16 +109,17 @@ export default function TwitterGenerator() {
               value={tweet}
               onChange={(e) => setTweet(e.target.value)}
               placeholder="Enter your tweet..."
-              className="h-32 bg-gray-900/50 border-gray-700 resize-none"
+              className="h-24 sm:h-32 bg-gray-900/50 border-gray-700 resize-none"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="text-sm block mb-2">Profile Image</label>
               <label className="flex items-center justify-center w-full h-10 px-4 py-2 text-sm font-medium bg-gray-900/50 border border-gray-700 rounded-md hover:bg-gray-800 cursor-pointer">
                 <Camera className="w-4 h-4 mr-2" />
-                Upload Profile
+                <span className="hidden xs:inline">Upload Profile</span>
+                <span className="xs:hidden">Profile</span>
                 <input type="file" accept="image/*" className="hidden" onChange={handleProfileImageChange} />
               </label>
             </div>
@@ -127,7 +128,8 @@ export default function TwitterGenerator() {
               <label className="text-sm block mb-2">Background Image</label>
               <label className="flex items-center justify-center w-full h-10 px-4 py-2 text-sm font-medium bg-gray-900/50 border border-gray-700 rounded-md hover:bg-gray-800 cursor-pointer">
                 <Upload className="w-4 h-4 mr-2" />
-                Upload Background
+                <span className="hidden xs:inline">Upload Background</span>
+                <span className="xs:hidden">Background</span>
                 <input type="file" accept="image/*" className="hidden" onChange={handleBackgroundChange} />
               </label>
             </div>
@@ -138,16 +140,13 @@ export default function TwitterGenerator() {
         <div className="mt-4"></div>
         <div className="mt-4"></div>
 
-
-
         {/* Preview with outer shadow only */}
         <div
-          className="relative shadow-2xl rounded-none"
+          className="relative shadow-2xl rounded-none mx-auto"
           style={{
             boxShadow: "0 5px 50px -12px rgba(255, 255, 255, 0.5)",
             width: "100%",
             maxWidth: "600px",
-            margin: "0 auto",
           }}
         >
           <div
@@ -162,27 +161,27 @@ export default function TwitterGenerator() {
             }}
           >
             {/* Tweet container */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-full max-w-lg bg-[#151f2b] px-12">
+            <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-0">
+              <div className="w-full max-w-lg bg-[#151f2b] px-6 sm:px-12">
                 {/* Profile section */}
                 <div className="flex items-start">
-                  <div className="w-12 h-12 rounded-full overflow-hidden mr-3 bg-gray-800 border border-gray-700">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden mr-3 bg-gray-800 border border-gray-700 flex-shrink-0">
                     <img
                       src={profileImage || "/placeholder.svg"}
                       alt="Profile"
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <div className="flex-grow">
-                    <div className="text-white font-bold text-xl">{name}</div>
-                    <div className="text-gray-500 text-xl">@{handle}</div>
+                  <div className="flex-grow min-w-0">
+                    <div className="text-white font-bold text-lg sm:text-xl truncate">{name}</div>
+                    <div className="text-gray-500 text-lg sm:text-xl truncate">@{handle}</div>
                   </div>
-                  <div className="text-gray-500 text-sm leading-none">•••</div>
+                  <div className="text-gray-500 text-sm leading-none flex-shrink-0 ml-2">•••</div>
                 </div>
 
                 {/* Tweet content */}
-                <div className="mt-4">
-                  <p className="text-white text-2xl font-twitter whitespace-pre-line">{tweet}</p>
+                <div className="mt-3 sm:mt-4">
+                  <p className="text-white text-lg sm:text-2xl font-twitter whitespace-pre-line leading-tight sm:leading-normal">{tweet}</p>
                 </div>
               </div>
             </div>
@@ -190,7 +189,7 @@ export default function TwitterGenerator() {
         </div>
 
         <div className="flex justify-center">
-          <Button onClick={downloadImage} className="bg-blue-500 hover:bg-blue-600" disabled={isGenerating}>
+          <Button onClick={downloadImage} className="bg-blue-500 hover:bg-blue-600 w-full sm:w-auto" disabled={isGenerating}>
             {isGenerating ? (
               <span className="flex items-center">
                 <svg
