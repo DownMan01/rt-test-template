@@ -165,7 +165,7 @@ export default function TwitterGenerator() {
               <div className="w-full max-w-[17.5rem] sm:max-w-lg bg-[#151f2b] px-4 sm:px-12">
                 {/* Profile section - Smaller but still readable */}
                 <div className="flex items-start">
-                  <div className="w-10 h-10 sm:w-[2.625rem] sm:h-[2.625rem] rounded-full overflow-hidden mr-2 sm:mr-3 bg-gray-800 border border-gray-700 flex-shrink-0">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden mr-2 sm:mr-3 bg-gray-800 border border-gray-700 flex-shrink-0">
                     <img
                       src={profileImage || "/placeholder.svg"}
                       alt="Profile"
