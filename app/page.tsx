@@ -176,7 +176,7 @@ export default function TwitterGenerator() {
                     <div className="text-white font-bold text-sm sm:text-xl truncate">{name}</div>
                     <div className="text-gray-500 text-sm sm:text-xl truncate">@{handle}</div>
                   </div>
-                  <div className="text-gray-500 text-xs sm:text-sm leading-none flex-shrink-0 ml-1 sm:ml-2">•••</div>
+                  <div className="text-gray-500 text-[16.5rem] sm:text-sm leading-none flex-shrink-0 ml-1 sm:ml-2">•••</div>
                 </div>
 
                 {/* Tweet content - Smaller to fit without overlapping */}
