@@ -162,7 +162,7 @@ export default function TwitterGenerator() {
           >
             {/* Tweet container - Smaller to prevent overlapping */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-full max-w-2xs sm:max-w-lg bg-[#151f2b] px-4 sm:px-12">
+              <div className="w-full max-w-sm sm:max-w-lg bg-[#151f2b] px-4 sm:px-12">
                 {/* Profile section - Smaller but still readable */}
                 <div className="flex items-start">
                   <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-full overflow-hidden mr-2 sm:mr-3 bg-gray-800 border border-gray-700 flex-shrink-0">
