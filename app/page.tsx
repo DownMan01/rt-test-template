@@ -160,12 +160,12 @@ export default function TwitterGenerator() {
               width: "100%",
             }}
           >
-            {/* Tweet container - Small on mobile, but downloads at desktop size due to pixelRatio */}
+            {/* Tweet container - Matching reference image proportions */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-full max-w-lg bg-[#151f2b] px-6 sm:px-12">
-                {/* Profile section - Smaller on mobile */}
+              <div className="w-full max-w-sm sm:max-w-lg bg-[#151f2b] px-4 sm:px-12">
+                {/* Profile section - Much smaller to match reference */}
                 <div className="flex items-start">
-                  <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-full overflow-hidden mr-2 sm:mr-3 bg-gray-800 border border-gray-700 flex-shrink-0">
+                  <div className="w-6 h-6 sm:w-12 sm:h-12 rounded-full overflow-hidden mr-2 sm:mr-3 bg-gray-800 border border-gray-700 flex-shrink-0">
                     <img
                       src={profileImage || "/placeholder.svg"}
                       alt="Profile"
@@ -173,15 +173,15 @@ export default function TwitterGenerator() {
                     />
                   </div>
                   <div className="flex-grow min-w-0">
-                    <div className="text-white font-bold text-sm sm:text-xl truncate">{name}</div>
-                    <div className="text-gray-500 text-sm sm:text-xl truncate">@{handle}</div>
+                    <div className="text-white font-bold text-xs sm:text-xl truncate">{name}</div>
+                    <div className="text-gray-500 text-xs sm:text-xl truncate">@{handle}</div>
                   </div>
                   <div className="text-gray-500 text-xs sm:text-sm leading-none flex-shrink-0 ml-1 sm:ml-2">•••</div>
                 </div>
 
-                {/* Tweet content - Much smaller on mobile */}
+                {/* Tweet content - Smaller to match reference proportions */}
                 <div className="mt-2 sm:mt-4">
-                  <p className="text-white text-sm sm:text-2xl font-twitter whitespace-pre-line leading-tight sm:leading-normal">{tweet}</p>
+                  <p className="text-white text-xs sm:text-2xl font-twitter whitespace-pre-line leading-tight sm:leading-normal">{tweet}</p>
                 </div>
               </div>
             </div>
