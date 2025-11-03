@@ -55,6 +55,7 @@ export default function TwitterGenerator() {
         pixelRatio: 3, // Higher pixel ratio for better quality
         canvasWidth: 1500,
         canvasHeight: 1500,
+        useCORS: true,
       })
 
       // Create download link
