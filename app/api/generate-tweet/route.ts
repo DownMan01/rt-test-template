@@ -1,131 +1,205 @@
-import { NextResponse } from "next/server";
-import chromium from "@sparticuz/chromium";
-import puppeteer from "puppeteer-core";
+import { NextRequest, NextResponse } from 'next/server';
+import puppeteer from 'puppeteer';
 
-export async function POST(req: Request) {
-  const { name, handle, tweet, profileImage, background } = await req.json();
-
+export async function POST(request: NextRequest) {
   try {
-    const browser = await puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: { width: 1500, height: 1500 },
-      executablePath: await chromium.executablePath(),
-      headless: true,
+    const { name, handle, tweet, profileImage, background } = await request.json();
+    
+    // Validate required fields
+    if (!name || !handle || !tweet) {
+      return NextResponse.json(
+        { error: 'Missing required parameters: name, handle, and tweet are required' },
+        { status: 400 }
+      );
+    }
+
+    console.log('Generating quote for:', { name, handle });
+
+    // Launch browser
+    const browser = await puppeteer.launch({ 
+      headless: 'new',
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
-
+    
     const page = await browser.newPage();
-
-    // HTML exactly matches your preview layout
+    
+    // Set viewport to match your component's output size
+    await page.setViewport({ 
+      width: 1500, 
+      height: 1500, 
+      deviceScaleFactor: 3 
+    });
+    
+    // Generate HTML that matches your React component exactly
     const html = `
+      <!DOCTYPE html>
       <html>
         <head>
-          <meta charset="utf-8" />
+          <meta charset="UTF-8">
           <style>
+            * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+            }
+            
             body {
               margin: 0;
+              padding: 0;
+              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            }
+            
+            .tweet-container {
               width: 1500px;
               height: 1500px;
+              background-color: #15202B;
+              ${background ? `background-image: url('${background}');` : ''}
+              background-size: cover;
+              background-position: center;
               display: flex;
-              justify-content: center;
               align-items: center;
-              background: #15202B url("${background}") center/cover no-repeat;
-              font-family: 'Segoe UI', Roboto, sans-serif;
-            }
-
-            .tweet-wrapper {
-              width: 600px;
-              padding: 32px;
-              background-color: #151f2b;
-              box-shadow: 0 5px 50px -12px rgba(255, 255, 255, 0.5);
+              justify-content: center;
               position: relative;
-              display: flex;
-              flex-direction: column;
-              gap: 16px;
+              overflow: hidden;
             }
-
-            .profile {
+            
+            .tweet-content-wrapper {
+              width: 100%;
+              max-width: 512px;
+              background: #151f2b;
+              padding: 48px;
+            }
+            
+            .profile-section {
               display: flex;
               align-items: flex-start;
-              gap: 12px;
             }
-
-            .avatar {
+            
+            .profile-img-wrapper {
               width: 48px;
               height: 48px;
               border-radius: 50%;
               overflow: hidden;
-              border: 1px solid #333;
+              margin-right: 12px;
+              background: #1f2937;
+              border: 1px solid #374151;
               flex-shrink: 0;
             }
-
-            .avatar img {
+            
+            .profile-img {
               width: 100%;
               height: 100%;
               object-fit: cover;
             }
-
-            .user-info {
-              display: flex;
-              flex-direction: column;
-              gap: 0;
+            
+            .profile-info {
+              flex-grow: 1;
+              min-width: 0;
             }
-
+            
             .name {
+              color: white;
               font-weight: bold;
-              font-size: 18px;
-              color: #fff;
+              font-size: 20px;
+              line-height: 1.2;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
             }
-
+            
             .handle {
-              font-size: 16px;
-              color: #8b98a5;
+              color: #6b7280;
+              font-size: 20px;
+              line-height: 1;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
             }
-
-            .more {
-              margin-left: auto;
-              color: #8b98a5;
+            
+            .menu-dots {
+              color: #6b7280;
               font-size: 14px;
+              line-height: 1;
+              flex-shrink: 0;
+              margin-left: 8px;
             }
-
+            
             .tweet-text {
-              font-size: 22px;
-              color: #fff;
-              line-height: 1.4;
+              color: white;
+              font-size: 24px;
+              line-height: 1.5;
               white-space: pre-line;
+              word-wrap: break-word;
+              margin-top: 16px;
             }
           </style>
         </head>
         <body>
-          <div class="tweet-wrapper">
-            <div class="profile">
-              <div class="avatar">
-                <img src="${
-                  profileImage ||
-                  "https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png"
-                }" />
+          <div class="tweet-container">
+            <div class="tweet-content-wrapper">
+              <div class="profile-section">
+                <div class="profile-img-wrapper">
+                  <img 
+                    src="${profileImage || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'48\' height=\'48\'%3E%3Crect width=\'48\' height=\'48\' fill=\'%231f2937\'/%3E%3C/svg%3E'}" 
+                    class="profile-img" 
+                    crossorigin="anonymous"
+                    onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'48\\' height=\\'48\\'%3E%3Crect width=\\'48\\' height=\\'48\\' fill=\\'%231f2937\\'/%3E%3C/svg%3E'"
+                  />
+                </div>
+                <div class="profile-info">
+                  <div class="name">${name}</div>
+                  <div class="handle">@${handle}</div>
+                </div>
+                <div class="menu-dots">•••</div>
               </div>
-              <div class="user-info">
-                <div class="name">${name}</div>
-                <div class="handle">@${handle}</div>
-              </div>
-              <div class="more">•••</div>
+              <div class="tweet-text">${tweet.replace(/\n/g, '<br>')}</div>
             </div>
-            <div class="tweet-text">${tweet}</div>
           </div>
         </body>
       </html>
     `;
-
-    await page.setContent(html, { waitUntil: "networkidle0" });
-    const imageBuffer = await page.screenshot({ type: "png" });
-
-    await browser.close();
-
-    return new Response(imageBuffer, {
-      headers: { "Content-Type": "image/png" },
+    
+    // Load the HTML
+    await page.setContent(html, { 
+      waitUntil: 'networkidle0',
+      timeout: 30000 
     });
-  } catch (err) {
-    console.error("❌ Error generating image:", err);
-    return NextResponse.json({ error: "Failed to generate tweet image" }, { status: 500 });
+    
+    // Take screenshot
+    const screenshot = await page.screenshot({ 
+      type: 'png',
+      omitBackground: false,
+      fullPage: false
+    });
+    
+    await browser.close();
+    
+    console.log('Quote generated successfully');
+    
+    // Return the image
+    return new NextResponse(screenshot, {
+      headers: {
+        'Content-Type': 'image/png',
+        'Content-Disposition': 'attachment; filename="twitter-quote.png"',
+        'Cache-Control': 'no-cache, no-store, must-revalidate'
+      }
+    });
+    
+  } catch (error) {
+    console.error('Error generating quote:', error);
+    return NextResponse.json({ 
+      error: 'Failed to generate quote image',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }, { status: 500 });
   }
+}
+
+// Optional: Add GET method for health check
+export async function GET() {
+  return NextResponse.json({ 
+    status: 'ok',
+    message: 'Twitter Quote Generator API',
+    endpoint: 'POST /api/generate-quote',
+    timestamp: new Date().toISOString()
+  });
 }
