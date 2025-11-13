@@ -60,9 +60,8 @@
     "zod": "^3.24.1",
     "html-to-image": "latest",
     "tailwindcss": "latest",
-    "puppeteer-core": "^22.15.0",
-    "@sparticuz/chromium": "^142.0.0",
-    "puppeteer": "^21.6.0"
+    "puppeteer-core": "^22.10.0",
+    "@sparticuz/chromium": "^123.0.1"
   },
   "devDependencies": {
     "@types/node": "^22",
