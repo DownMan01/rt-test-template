@@ -3,7 +3,7 @@ import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer-core";
 
 export async function POST(req: Request) {
-  const { quote, name, handle, profileImage, background } = await req.json();
+  const { name, handle, tweet, profileImage, background } = await req.json();
 
   try {
     const browser = await puppeteer.launch({
@@ -15,6 +15,7 @@ export async function POST(req: Request) {
 
     const page = await browser.newPage();
 
+    // HTML exactly matches your preview layout
     const html = `
       <html>
         <head>
@@ -22,66 +23,94 @@ export async function POST(req: Request) {
           <style>
             body {
               margin: 0;
-              background: #15202B url("${
-                background ||
-                "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80"
-              }") center/cover no-repeat;
               width: 1500px;
               height: 1500px;
               display: flex;
-              align-items: center;
               justify-content: center;
+              align-items: center;
+              background: #15202B url("${background}") center/cover no-repeat;
               font-family: 'Segoe UI', Roboto, sans-serif;
             }
-            .tweet {
-              background: rgba(21, 31, 43, 0.95);
+
+            .tweet-wrapper {
               width: 600px;
               padding: 32px;
-              border-radius: 16px;
-              box-shadow: 0 10px 50px rgba(0,0,0,0.5);
-              color: white;
+              background-color: #151f2b;
+              box-shadow: 0 5px 50px -12px rgba(255, 255, 255, 0.5);
+              position: relative;
+              display: flex;
+              flex-direction: column;
+              gap: 16px;
             }
+
             .profile {
               display: flex;
-              align-items: center;
-              margin-bottom: 16px;
+              align-items: flex-start;
+              gap: 12px;
             }
+
             .avatar {
               width: 48px;
               height: 48px;
               border-radius: 50%;
               overflow: hidden;
-              margin-right: 12px;
-              flex-shrink: 0;
               border: 1px solid #333;
+              flex-shrink: 0;
             }
+
             .avatar img {
               width: 100%;
               height: 100%;
               object-fit: cover;
             }
-            .name { font-weight: bold; font-size: 18px; }
-            .handle { color: #888; font-size: 16px; }
+
+            .user-info {
+              display: flex;
+              flex-direction: column;
+              gap: 0;
+            }
+
+            .name {
+              font-weight: bold;
+              font-size: 18px;
+              color: #fff;
+            }
+
+            .handle {
+              font-size: 16px;
+              color: #8b98a5;
+            }
+
+            .more {
+              margin-left: auto;
+              color: #8b98a5;
+              font-size: 14px;
+            }
+
             .tweet-text {
-              white-space: pre-line;
-              font-size: 20px;
+              font-size: 22px;
+              color: #fff;
               line-height: 1.4;
+              white-space: pre-line;
             }
           </style>
         </head>
         <body>
-          <div class="tweet">
+          <div class="tweet-wrapper">
             <div class="profile">
-              <div class="avatar"><img src="${
-                profileImage ||
-                "https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png"
-              }" /></div>
-              <div>
-                <div class="name">${name || "Random Tweets"}</div>
-                <div class="handle">@${handle || "anonymous"}</div>
+              <div class="avatar">
+                <img src="${
+                  profileImage ||
+                  "https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png"
+                }" />
               </div>
+              <div class="user-info">
+                <div class="name">${name}</div>
+                <div class="handle">@${handle}</div>
+              </div>
+              <div class="more">•••</div>
             </div>
-            <div class="tweet-text">${quote}</div>
+            <div class="tweet-text">${tweet}</div>
           </div>
         </body>
       </html>
@@ -97,9 +126,6 @@ export async function POST(req: Request) {
     });
   } catch (err) {
     console.error("❌ Error generating image:", err);
-    return NextResponse.json(
-      { error: "Failed to generate tweet image" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to generate tweet image" }, { status: 500 });
   }
 }
