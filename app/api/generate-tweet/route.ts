@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer-core';
+import chromium from '@sparticuz/chromium';
+
+export const maxDuration = 60; // Maximum execution time for Vercel serverless function
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,10 +18,12 @@ export async function POST(request: NextRequest) {
 
     console.log('Generating quote for:', { name, handle });
 
-    // Launch browser
-    const browser = await puppeteer.launch({ 
-      headless: 'new',
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    // Launch browser with chromium for serverless (Vercel)
+    const browser = await puppeteer.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: chromium.headless,
     });
     
     const page = await browser.newPage();
@@ -199,7 +204,7 @@ export async function GET() {
   return NextResponse.json({ 
     status: 'ok',
     message: 'Twitter Quote Generator API',
-    endpoint: 'POST /api/generate-quote',
+    endpoint: 'POST /api/generate-tweet',
     timestamp: new Date().toISOString()
   });
 }
