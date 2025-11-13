@@ -3,7 +3,7 @@ import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer-core";
 
 export async function POST(req: Request) {
-  const { name, handle, tweet, profileImage, background } = await req.json();
+  const { quote, name, handle, profileImage, background } = await req.json();
 
   try {
     const browser = await puppeteer.launch({
@@ -22,7 +22,10 @@ export async function POST(req: Request) {
           <style>
             body {
               margin: 0;
-              background: #15202B url("${background}") center/cover no-repeat;
+              background: #15202B url("${
+                background ||
+                "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80"
+              }") center/cover no-repeat;
               width: 1500px;
               height: 1500px;
               display: flex;
@@ -69,13 +72,16 @@ export async function POST(req: Request) {
         <body>
           <div class="tweet">
             <div class="profile">
-              <div class="avatar"><img src="${profileImage}" /></div>
+              <div class="avatar"><img src="${
+                profileImage ||
+                "https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png"
+              }" /></div>
               <div>
-                <div class="name">${name}</div>
-                <div class="handle">@${handle}</div>
+                <div class="name">${name || "Random Tweets"}</div>
+                <div class="handle">@${handle || "anonymous"}</div>
               </div>
             </div>
-            <div class="tweet-text">${tweet}</div>
+            <div class="tweet-text">${quote}</div>
           </div>
         </body>
       </html>
