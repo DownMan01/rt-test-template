@@ -1,50 +1,46 @@
 "use client";
 
-import { useState } from "react";
-import { Download, Loader2 } from "lucide-react";
+import { useState, type ChangeEvent } from "react";
+import { Camera, Download, Upload, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-export default function SimpleAPIGenerator() {
-  const [quote, setQuote] = useState("");
-  const [loading, setLoading] = useState(false);
+export default function TwitterGenerator() {
+  const [name, setName] = useState("Random Tweets");
+  const [handle, setHandle] = useState("irtph");
+  const [tweet, setTweet] = useState("dito mo ilagay yung quote mo,\ndapat hindi masyadong mahaba.");
+  const [profileImage, setProfileImage] = useState("/rt.svg?height=80&width=80");
+  const [background, setBackground] = useState("/bg-rt.png?height=1500&width=1500");
+  const [isGenerating, setIsGenerating] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
-  const generateImage = async () => {
-    if (!quote.trim()) {
-      setError("Please enter a quote");
-      return;
+  const handleUpload = (e: ChangeEvent<HTMLInputElement>, setter: (v: string) => void) => {
+    if (e.target.files?.[0]) {
+      const reader = new FileReader();
+      reader.onload = (ev) => ev.target?.result && setter(ev.target.result as string);
+      reader.readAsDataURL(e.target.files[0]);
     }
+  };
 
-    setLoading(true);
-    setError(null);
-
+  const generateServerImage = async () => {
+    setIsGenerating(true);
     try {
-      const response = await fetch("/api/generate-tweet", {
+      const res = await fetch("/api/generate-tweet", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          quote,
-          name: "Random Tweets",
-          handle: "irtph",
-        }),
+        body: JSON.stringify({ name, handle, tweet, profileImage, background }),
       });
+      if (!res.ok) throw new Error("Failed to generate image");
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to generate image");
-      }
-
-      const blob = await response.blob();
-      if (imageUrl) URL.revokeObjectURL(imageUrl);
+      const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       setImageUrl(url);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Unknown error occurred");
-      console.error("Error:", err);
+      console.error(err);
+      alert("Failed to generate image. Check console.");
     } finally {
-      setLoading(false);
+      setIsGenerating(false);
     }
   };
 
@@ -52,86 +48,74 @@ export default function SimpleAPIGenerator() {
     if (!imageUrl) return;
     const link = document.createElement("a");
     link.href = imageUrl;
-    link.download = `tweet-quote-${Date.now()}.png`;
+    link.download = "twitter-quote.png";
     link.click();
   };
 
   return (
     <div className="min-h-screen bg-[#15202B] text-white p-4 sm:p-6">
       <div className="max-w-2xl mx-auto space-y-6 sm:space-y-8">
-        <div className="text-center space-y-2">
-          <h1 className="text-xl sm:text-2xl font-bold">API Tweet Generator</h1>
-          <p className="text-sm text-gray-400">Powered by Puppeteer + Chromium</p>
-        </div>
+        <h1 className="text-xl sm:text-2xl font-bold text-center">Random Tweets Quote Generator</h1>
 
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Your Quote</label>
-            <Textarea
-              value={quote}
-              onChange={(e) => setQuote(e.target.value)}
-              placeholder="Enter your inspiring quote..."
-              className="h-32 bg-gray-900/50 border-gray-700 resize-none"
-              maxLength={500}
-              disabled={loading}
-            />
-            <div className="flex justify-between text-xs text-gray-500">
-              <span>{quote.length}/500 characters</span>
-              {quote.length > 400 && (
-                <span className="text-yellow-500">
-                  {500 - quote.length} characters remaining
-                </span>
-              )}
-            </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="text-sm">Name</label>
+            <Input value={name} onChange={(e) => setName(e.target.value)} className="bg-gray-900/50 border-gray-700" />
           </div>
 
+          <div>
+            <label className="text-sm">Username</label>
+            <div className="flex">
+              <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-700 bg-gray-900/70 text-gray-400">@</span>
+              <Input
+                value={handle}
+                onChange={(e) => setHandle(e.target.value)}
+                className="rounded-l-none bg-gray-900/50 border-gray-700"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label className="text-sm">Tweet Text</label>
+          <Textarea value={tweet} onChange={(e) => setTweet(e.target.value)} className="h-24 sm:h-32 bg-gray-900/50 border-gray-700 resize-none" />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="text-sm block mb-2">Profile Image</label>
+            <label className="flex items-center justify-center w-full h-10 px-4 py-2 text-sm font-medium bg-gray-900/50 border border-gray-700 rounded-md hover:bg-gray-800 cursor-pointer">
+              <Camera className="w-4 h-4 mr-2" /> Upload Profile
+              <input type="file" accept="image/*" className="hidden" onChange={(e) => handleUpload(e, setProfileImage)} />
+            </label>
+          </div>
+          <div>
+            <label className="text-sm block mb-2">Background Image</label>
+            <label className="flex items-center justify-center w-full h-10 px-4 py-2 text-sm font-medium bg-gray-900/50 border border-gray-700 rounded-md hover:bg-gray-800 cursor-pointer">
+              <Upload className="w-4 h-4 mr-2" /> Upload Background
+              <input type="file" accept="image/*" className="hidden" onChange={(e) => handleUpload(e, setBackground)} />
+            </label>
+          </div>
+        </div>
+
+        <div className="flex justify-center mt-6">
           <Button
-            onClick={generateImage}
-            disabled={loading || !quote.trim()}
-            className="w-full bg-blue-500 hover:bg-blue-600"
+            onClick={generateServerImage}
+            className="bg-blue-500 hover:bg-blue-600 w-full sm:w-auto"
+            disabled={isGenerating}
           >
-            {loading ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Generating on server...
-              </>
-            ) : (
-              "Generate Tweet Image"
-            )}
+            {isGenerating ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : "Generate Tweet Image"}
           </Button>
-
-          {error && (
-            <div className="bg-red-900/50 border border-red-500 text-red-200 px-4 py-3 rounded">
-              <p className="font-medium">Error</p>
-              <p className="text-sm">{error}</p>
-            </div>
-          )}
-
-          {imageUrl && (
-            <div className="space-y-4">
-              <div className="bg-gray-900/50 border border-gray-700 rounded-lg overflow-hidden">
-                <img src={imageUrl} alt="Generated tweet" className="w-full h-auto" />
-              </div>
-
-              <Button
-                onClick={downloadImage}
-                variant="outline"
-                className="w-full border-gray-700"
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Download Image
-              </Button>
-            </div>
-          )}
         </div>
 
-        <div className="border-t border-gray-700 pt-6 text-center text-xs text-gray-500">
-          <p>
-            Server-side rendering with Puppeteer
-            <br />
-            Compatible with Vercel Edge + local testing
-          </p>
-        </div>
+        {imageUrl && (
+          <div className="space-y-4 mt-6">
+            <img src={imageUrl} alt="Generated tweet" className="w-full border border-gray-700 rounded-lg" />
+            <Button onClick={downloadImage} variant="outline" className="w-full border-gray-700">
+              <Download className="w-4 h-4 mr-2" /> Download Image
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
