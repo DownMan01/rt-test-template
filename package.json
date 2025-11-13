@@ -61,7 +61,7 @@
     "html-to-image": "latest",
     "tailwindcss": "latest",
     "puppeteer-core": "^23.9.0",
-    "@sparticuz/chromium": "^131.0.2"
+    "@sparticuz/chromium": "^131.0.0"
   },
   "devDependencies": {
     "@types/node": "^22",
