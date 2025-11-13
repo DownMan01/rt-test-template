@@ -59,7 +59,9 @@
     "vaul": "^0.9.6",
     "zod": "^3.24.1",
     "html-to-image": "latest",
-    "tailwindcss": "latest"
+    "tailwindcss": "latest",
+    "puppeteer-core": "^23.9.0",
+    "@sparticuz/chromium": "^131.0.2"
   },
   "devDependencies": {
     "@types/node": "^22",
