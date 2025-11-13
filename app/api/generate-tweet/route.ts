@@ -2,9 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import puppeteer from 'puppeteer-core';
 import chromium from '@sparticuz/chromium';
 
-export const maxDuration = 60; // Maximum execution time for Vercel serverless function
+export const maxDuration = 60;
 
 export async function POST(request: NextRequest) {
+  let browser = null;
+  
   try {
     const { name, handle, tweet, profileImage, background } = await request.json();
     
@@ -18,24 +20,40 @@ export async function POST(request: NextRequest) {
 
     console.log('Generating quote for:', { name, handle });
 
-    // Launch browser with chromium for serverless (Vercel)
-    const browser = await puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
+    // Configure chromium for serverless
+    chromium.setHeadlessMode = true;
+    chromium.setGraphicsMode = false;
+
+    // Launch browser with correct configuration
+    browser = await puppeteer.launch({
+      args: [
+        ...chromium.args,
+        '--disable-gpu',
+        '--disable-dev-shm-usage',
+        '--disable-setuid-sandbox',
+        '--no-first-run',
+        '--no-sandbox',
+        '--no-zygote',
+        '--single-process',
+      ],
+      defaultViewport: {
+        width: 1500,
+        height: 1500,
+      },
       executablePath: await chromium.executablePath(),
       headless: chromium.headless,
     });
     
     const page = await browser.newPage();
     
-    // Set viewport to match your component's output size
+    // Set viewport
     await page.setViewport({ 
       width: 1500, 
       height: 1500, 
-      deviceScaleFactor: 3 
+      deviceScaleFactor: 2
     });
     
-    // Generate HTML that matches your React component exactly
+    // Generate HTML
     const html = `
       <!DOCTYPE html>
       <html>
@@ -73,6 +91,7 @@ export async function POST(request: NextRequest) {
               max-width: 512px;
               background: #151f2b;
               padding: 48px;
+              border-radius: 8px;
             }
             
             .profile-section {
@@ -147,8 +166,7 @@ export async function POST(request: NextRequest) {
                   <img 
                     src="${profileImage || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'48\' height=\'48\'%3E%3Crect width=\'48\' height=\'48\' fill=\'%231f2937\'/%3E%3C/svg%3E'}" 
                     class="profile-img" 
-                    crossorigin="anonymous"
-                    onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'48\\' height=\\'48\\'%3E%3Crect width=\\'48\\' height=\\'48\\' fill=\\'%231f2937\\'/%3E%3C/svg%3E'"
+                    alt="Profile"
                   />
                 </div>
                 <div class="profile-info">
@@ -157,7 +175,7 @@ export async function POST(request: NextRequest) {
                 </div>
                 <div class="menu-dots">•••</div>
               </div>
-              <div class="tweet-text">${tweet.replace(/\n/g, '<br>')}</div>
+              <div class="tweet-text">${tweet.replace(/\n/g, '<br>').replace(/'/g, "&#39;").replace(/"/g, "&quot;")}</div>
             </div>
           </div>
         </body>
@@ -177,8 +195,6 @@ export async function POST(request: NextRequest) {
       fullPage: false
     });
     
-    await browser.close();
-    
     console.log('Quote generated successfully');
     
     // Return the image
@@ -196,10 +212,14 @@ export async function POST(request: NextRequest) {
       error: 'Failed to generate quote image',
       details: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 500 });
+  } finally {
+    // Always close the browser
+    if (browser) {
+      await browser.close();
+    }
   }
 }
 
-// Optional: Add GET method for health check
 export async function GET() {
   return NextResponse.json({ 
     status: 'ok',
