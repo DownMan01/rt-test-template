@@ -1,8 +1,8 @@
 {
   "functions": {
     "app/api/generate-tweet/route.ts": {
-      "maxDuration": 10,
-      "memory": 100
+      "maxDuration": 30,
+      "memory": 1000
     }
   }
 }
